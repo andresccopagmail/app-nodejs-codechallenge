@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../infrastructure/persistence/prisma.service';
-import { KafkaService } from '../../infrastructure/kafka/kafka.service';
 import { CreateTransactionDto } from '../../interfaces/dto/create-transaction.dto';
 import { TransactionStatus } from '../../domain/enums/transaction-status.enum';
+import { KafkaEventBus } from 'src/infrastructure/kafka/kafka.event-bus';
 
 @Injectable()
 export class TransactionService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly kafka: KafkaService,
-  ) {}
+    private readonly kafkaEventBus: KafkaEventBus,
+  ) { }
 
   async create(dto: CreateTransactionDto) {
     const transaction = await this.prisma.transaction.create({
@@ -19,7 +19,7 @@ export class TransactionService {
       },
     });
 
-    await this.kafka.emit('transaction_created', {
+    await this.kafkaEventBus.emit('transaction_created', {
       transactionExternalId: transaction.id,
       value: dto.value,
     });

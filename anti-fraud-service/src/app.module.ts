@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { KafkaModule } from './infrastructure/kafka/kafka.config';
 import { KafkaController } from './interfaces/controllers/kafka.controller';
 import { AntiFraudService } from './application/anti-fraud.service';
-import { KafkaService } from './infrastructure/kafka/kafka.service';
+import { KafkaEventBus } from './infrastructure/kafka/kafka.event-bus';
 
 @Module({
-  imports: [KafkaModule],
+  imports: [],
   controllers: [KafkaController],
-  providers: [AntiFraudService, KafkaService],
+  providers: [AntiFraudService, KafkaEventBus],
 })
-export class AppModule {}
+export class AppModule { }

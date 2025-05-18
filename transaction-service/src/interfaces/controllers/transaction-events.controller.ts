@@ -9,7 +9,6 @@ export class TransactionEventsController {
 
   @EventPattern('transaction_validated')
   async handleTransactionValidated(@Payload() message: any) {
-    console.log(`Topic transaction_validated, message: ${JSON.stringify(message)}`);
     const { transactionExternalId, status } = message;
     const newStatus =
       status === 'approved'
